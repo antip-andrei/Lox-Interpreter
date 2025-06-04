@@ -17,15 +17,19 @@ public class GenerateAST {
         String outputDir = args.length == 1 ? args[0] : dirFromPrompt();
 
         defineAST(outputDir, "Expr", Arrays.asList(
+                "Assign: Token name, Expr value",
                 "Binary: Expr left, Token operator, Expr right",
                 "Grouping: Expr expression",
                 "Unary: Token operator, Expr right",
-                "Literal: Object value"
+                "Literal: Object value",
+                "Variable: Token name"
         ));
 
         defineAST(outputDir, "Stmt", Arrays.asList(
+                "Block: List<Stmt> statements",
                 "Expression: Expr expression",
-                "Print: Expr expression"
+                "Print: Expr expression",
+                "Var: Token name, Expr initializer"
         ));
     }
 
