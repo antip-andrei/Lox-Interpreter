@@ -6,6 +6,7 @@ abstract class Expr {
     interface Visitor<T> {
         T visitAssignExpr(Assign expr);
         T visitBinaryExpr(Binary expr);
+        T visitCallExpr(Call expr);
         T visitGroupingExpr(Grouping expr);
         T visitUnaryExpr(Unary expr);
         T visitLiteralExpr(Literal expr);
@@ -43,6 +44,22 @@ abstract class Expr {
         @Override
         <T> T accept(Visitor<T> visitor) {
             return visitor.visitBinaryExpr(this);
+        }
+    }
+    static class Call extends Expr {
+        final Expr callee;
+        final Token paren;
+        final List<Expr> arguments;
+
+        Call(Expr callee, Token paren, List<Expr> arguments) {
+            this.callee = callee;
+            this.paren = paren;
+            this.arguments = arguments;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitCallExpr(this);
         }
     }
     static class Grouping extends Expr {
