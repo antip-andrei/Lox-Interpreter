@@ -234,6 +234,9 @@ public class Parser {
         if (match(PRINT)) {
             return printStatement();
         }
+        if (match(RETURN)) {
+            return returnStatement();
+        }
         if (match(LEFT_BRACE)) {
             return new Stmt.Block(block());
         }
@@ -253,6 +256,16 @@ public class Parser {
         Expr expr = expression();
         consume(SEMICOLON, "Expected ';' after value.");
         return new Stmt.Print(expr);
+    }
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+        consume(SEMICOLON, "Expected ';' after return value.");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt expressionStatement() {
