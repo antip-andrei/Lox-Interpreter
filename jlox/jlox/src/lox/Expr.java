@@ -7,7 +7,10 @@ abstract class Expr {
         T visitAssignExpr(Assign expr);
         T visitBinaryExpr(Binary expr);
         T visitCallExpr(Call expr);
+        T visitGetExpr(Get expr);
         T visitGroupingExpr(Grouping expr);
+        T visitSetExpr(Set expr);
+        T visitThisExpr(This expr);
         T visitUnaryExpr(Unary expr);
         T visitLiteralExpr(Literal expr);
         T visitLogicalExpr(Logical expr);
@@ -62,6 +65,20 @@ abstract class Expr {
             return visitor.visitCallExpr(this);
         }
     }
+    static class Get extends Expr {
+        final Expr object;
+        final Token name;
+
+        Get(Expr object, Token name) {
+            this.object = object;
+            this.name = name;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitGetExpr(this);
+        }
+    }
     static class Grouping extends Expr {
         final Expr expression;
 
@@ -72,6 +89,34 @@ abstract class Expr {
         @Override
         <T> T accept(Visitor<T> visitor) {
             return visitor.visitGroupingExpr(this);
+        }
+    }
+    static class Set extends Expr {
+        final Expr object;
+        final Token name;
+        final Expr value;
+
+        Set(Expr object, Token name, Expr value) {
+            this.object = object;
+            this.name = name;
+            this.value = value;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitSetExpr(this);
+        }
+    }
+    static class This extends Expr {
+        final Token keyword;
+
+        This(Token keyword) {
+            this.keyword = keyword;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitThisExpr(this);
         }
     }
     static class Unary extends Expr {
