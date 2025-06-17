@@ -38,6 +38,10 @@ static uint32_t hashString(const char* key, int length) {
     return hash;
 }
 
+ObjClosure* newClosure(ObjFunction* function) {
+    ObjClosure* closure = ALLOCATE_OBJ(ObjClosure, OBJ_CLOSURE);
+}
+
 ObjFunction* newFunction() {
     ObjFunction* function = ALLOCATE_OBJ(ObjFunction, OBJ_FUNCTION);
     function->arity = 0;
@@ -88,6 +92,9 @@ static void printFunction(ObjFunction* function) {
 
 void printObject(Value value) {
     switch(OBJ_TYPE(value)) {
+        case OBJ_CLOSURE: {
+            printFunction(AS_CLOSURE(value)->function);
+        } break;
         case OBJ_FUNCTION: {
             printFunction(AS_FUNCTION(value));
         } break;
